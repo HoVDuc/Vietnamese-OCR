@@ -57,6 +57,7 @@ class Trainer():
 
         if pretrained:
             weight_file = download_weights(config['pretrain'], quiet=config['quiet'])
+            print(weight_file)
             self.load_weights(weight_file)
 
         self.iter = 0

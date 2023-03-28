@@ -8,7 +8,7 @@ class VGG(nn.Module):
     def __init__(self, name, ss, ks, hidden, pretrained=True, dropout=0.5) -> None:
         super(VGG, self).__init__()
         
-        assert name in ['vgg11_bn', 'vgg1_bn'], "Name model not supported"
+        assert name in ['vgg11_bn', 'vgg19_bn'], "Name model not supported"
         
         if name == 'vgg11_bn':
             cnn = torchvision.models.vgg11_bn(pretrained=pretrained)
