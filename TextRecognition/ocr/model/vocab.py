@@ -31,7 +31,7 @@ class Vocab():
             print('*')
         
     def decode(self, ids):
-        first = 1 if self.go in ids else 0
+        first = 1 if self.sos in ids else 0
         last = ids.index(self.eos) if self.eos in ids else None
         sent = ''.join([self.i2c[i] for i in ids[first:last]])
         return sent

@@ -111,7 +111,7 @@ class OCRDataset(Dataset):
         buf, label, img_path = self.read_buffer(idx)
 
         # Load image to buf
-        img = Image.open(buf).convert('RBG')
+        img = Image.open(buf).convert('RGB')
         
         # Using transform
         if self.transform:
