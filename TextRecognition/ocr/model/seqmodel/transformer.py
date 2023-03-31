@@ -15,7 +15,7 @@ class LanguageTransformer(nn.Module):
         self.d_model = d_model
         self.embed_tgt = nn.Embedding(vocab_size, d_model)
         self.pos_enc = PositionalEncoding(d_model, pos_dropout, max_seq_length)
-#        self.learned_pos_enc = LearnedPositionalEncoding(d_model, pos_dropout, max_seq_length)
+        # self.learned_pos_enc = LearnedPositionalEncoding(d_model, pos_dropout, max_seq_length)
 
         self.transformer = nn.Transformer(d_model, nhead,
                                           num_encoder_layers, num_decoder_layers,
@@ -32,7 +32,6 @@ class LanguageTransformer(nn.Module):
             - tgt_key_padding_mask: (N, T)
             - memory_key_padding_mask: (N, S)
             - output: (N, T, E)
-
         """
         tgt_mask = self.gen_nopeek_mask(tgt.shape[0]).to(src.device)
 

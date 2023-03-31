@@ -144,7 +144,7 @@ def resize(w, h, expected_height, image_min_width, image_max_width):
     # Tính new width dựa vào expected height
     new_w = int(expected_height * float(w) / float(h))
     round_to = 10
-    # Làm tròn số và nhân với round_to
+    # Làm tròn lên và nhân với round_to
     new_w = math.ceil(new_w/round_to)*round_to
     new_w = max(new_w, image_min_width)
     new_w = min(new_w, image_max_width)
@@ -183,6 +183,7 @@ def process_input(image, image_height, image_min_width, image_max_width):
     img = process_image(image, image_height, image_min_width, image_max_width)
     img = img[np.newaxis, ...] # Thêm một chiều mới vào ảnh
     img = torch.FloatTensor(img) # Convert ảnh từ numpy sang torch float
+    print(img.shape)
     return img
 
 def predict(filename, config):

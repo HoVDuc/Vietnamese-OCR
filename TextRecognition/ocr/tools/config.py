@@ -3,11 +3,7 @@ from ocr.tools.utils import download_config
 
 url_config = {
         'vgg_transformer':'vgg-transformer.yml',
-        'resnet_transformer':'resnet_transformer.yml',
-        'resnet_fpn_transformer':'resnet_fpn_transformer.yml',
-        'vgg_seq2seq':'vgg-seq2seq.yml',
-        'vgg_convseq2seq':'vgg_convseq2seq.yml',
-        'vgg_decoderseq2seq':'vgg_decoderseq2seq.yml',
+        'resnet_transformer':'resnet-transformer.yml',
         'base':'base.yml',
         }
 

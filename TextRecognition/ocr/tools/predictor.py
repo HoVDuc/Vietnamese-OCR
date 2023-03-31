@@ -1,22 +1,24 @@
-from vietocr.tool.translate import build_model, translate, translate_beam_search, process_input, predict
-from vietocr.tool.utils import download_weights
+from ocr.tools.translate import build_model, translate, translate_beam_search, process_input, predict
+from ocr.tools.utils import download_weights
 
 import torch
 from collections import defaultdict
 
 class Predictor():
     def __init__(self, config):
-
+        #Load config
         device = config['device']
         
+        # Load model, vocab
         model, vocab = build_model(config)
-        weights = '/tmp/weights.pth'
 
         # if config['weights'].startswith('http'):
         #     weights = download_weights(config['weights'])
         # else:
         #     weights = config['weights']
-
+        
+        # Load weights
+        weights = './weights/transformerocr.pth'
         model.load_state_dict(torch.load(weights, map_location=torch.device(device))) #Load parameters of model
 
         self.config = config

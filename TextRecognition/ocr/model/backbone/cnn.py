@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 import ocr.model.backbone.vgg as vgg
+import ocr.model.backbone.resnet18 as resnet
 
 
 class CNN(nn.Module):
@@ -12,6 +13,8 @@ class CNN(nn.Module):
             self.model = vgg.vgg11_bn(**kwargs)
         elif backbone == "vgg19_bn":
             self.model = vgg.vgg19_bn(**kwargs)
+        elif backbone == "resnet18_bn":
+            self.model = resnet.ResNet_18(3)
         
     def forward(self, x):
         return self.model(x)

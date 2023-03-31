@@ -23,7 +23,7 @@ def checkImageIsValid(image_bin):
     # Convert image from string binary to uint8
     imageBuf = np.fromstring(image_bin, dtype=np.uint8)
     try:
-        img = cv2.imdecode(imageBuf. cv2.IMREAD_GRAYSCALE) # Read and decode image to grayscale
+        img = cv2.imdecode(imageBuf, cv2.IMREAD_GRAYSCALE) # Read and decode image to grayscale
         
         imgH, imgW = img.shape # Get height and width of Image
         # Check shape of image is valid 
@@ -70,7 +70,10 @@ def createDataset(output_path, root_dir, annotation_path):
     process_bar = tqdm(range(n_samples), ncols=100, desc="Create {}".format(output_path))
     for i in process_bar:
         #Get name and label of image file
-        image_file, label = annotations[i]
+        try:
+            image_file, label = annotations[i]
+        except ValueError as e:
+            print(annotations[i]) 
         # Get image path
         image_path = os.path.join(root_dir, image_file)
         
