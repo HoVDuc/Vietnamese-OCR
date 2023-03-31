@@ -1,0 +1,6 @@
+backbone: resnet18_bn
+cnn:
+    pretrained: False
+    # pooling stride size
+    hidden: 256
+

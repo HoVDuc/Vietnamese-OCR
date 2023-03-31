@@ -15,7 +15,7 @@ class LabelSmoothingLoss(nn.Module):
         with torch.no_grad():
             # true_dist = pred.data.clone()
             true_dist = torch.zeros_like(pred)
-            true_dist.fill_(self.smoothing / (self.cls - 2))
+            true_dist.fill_(self.smoothing / (self.cls - 2)) # Fill tensor with the specified value 
             true_dist.scatter_(1, target.data.unsqueeze(1), self.confidence)
             true_dist[:, self.padding_idx] = 0
             mask = torch.nonzero(target.data == self.padding_idx, as_tuple=False)

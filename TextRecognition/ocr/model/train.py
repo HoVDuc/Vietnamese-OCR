@@ -27,7 +27,8 @@ import time
 
 class Trainer():
     def __init__(self, config, pretrained=True, augmentor=ImgAugTransform()):
-
+        
+        # Load config
         self.config = config
         self.model, self.vocab = build_model(config)
         
@@ -55,12 +56,16 @@ class Trainer():
         if logger:
             self.logger = Logger(logger) 
 
+        # Download and load weight of pretrained
         if pretrained:
             weight_file = download_weights(config['pretrain'], quiet=config['quiet'])
             self.load_weights(weight_file)
-
+        
+        # Set hyperparameter
         self.iter = 0
         
+        # Optimizer using AdamW and scheduler use OneCycleLR
+        # OneCycleLR: Sets the learning rate of each parameter group according to the 1cycle learning rate policy.
         self.optimizer = AdamW(self.model.parameters(), betas=(0.9, 0.98), eps=1e-09)
         self.scheduler = OneCycleLR(self.optimizer, total_steps=self.num_iters, **config['optimizer'])
 #        self.optimizer = ScheduledOptim(
@@ -69,6 +74,7 @@ class Trainer():
 #            512,
 #            **config['optimizer'])
 
+        # Loss function using Label smoothing 
         self.criterion = LabelSmoothingLoss(len(self.vocab), padding_idx=self.vocab.pad, smoothing=0.1)
         
         transforms = None
@@ -84,33 +90,40 @@ class Trainer():
         self.train_losses = []
         
     def train(self):
+        # Init parameters
         total_loss = 0
         
         total_loader_time = 0
         total_gpu_time = 0
         best_acc = 0
 
+        # Get data to training process
         data_iter = iter(self.train_gen)
+        # Start training
         for i in range(self.num_iters):
             self.iter += 1
 
             start = time.time()
 
+            # Get data
             try:
                 batch = next(data_iter)
             except StopIteration:
                 data_iter = iter(self.train_gen)
                 batch = next(data_iter)
 
+            # Start timing
             total_loader_time += time.time() - start
 
             start = time.time()
+            # Training
             loss = self.step(batch)
             total_gpu_time += time.time() - start
 
             total_loss += loss
             self.train_losses.append((self.iter, loss))
 
+            # Print info training process to terminal
             if self.iter % self.print_every == 0:
                 info = 'iter: {:06d} - train loss: {:.3f} - lr: {:.2e} - load time: {:.2f} - gpu time: {:.2f}'.format(self.iter, 
                         total_loss/self.print_every, self.optimizer.param_groups[0]['lr'], 
@@ -122,6 +135,7 @@ class Trainer():
                 print(info) 
                 self.logger.log(info)
 
+            # Print info evaluate process to terminal
             if self.valid_annotation and self.iter % self.valid_every == 0:
                 val_loss = self.validate()
                 acc_full_seq, acc_per_char = self.precision(self.metrics)
@@ -140,6 +154,7 @@ class Trainer():
 
         total_loss = []
         
+        # Evaluate model
         with torch.no_grad():
             for step, batch in enumerate(self.valid_gen):
                 batch = self.batch_to_device(batch)

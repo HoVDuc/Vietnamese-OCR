@@ -3,7 +3,8 @@ class ScheduledOptim():
 
     def __init__(self, optimizer, d_model, init_lr, n_warmup_steps):
         assert n_warmup_steps > 0, 'must be greater than 0'
-
+        
+        #Init parameters
         self._optimizer = optimizer
         self.init_lr = init_lr
         self.d_model = d_model
