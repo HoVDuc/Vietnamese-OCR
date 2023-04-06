@@ -14,9 +14,6 @@ class VGG(nn.Module):
             cnn = torchvision.models.vgg11_bn(pretrained=pretrained)
         else:
             cnn = torchvision.models.vgg19_bn(pretrained=pretrained)
-        
-        for m in cnn.modules():
-            print(m)
             
         pool_idx = 0
         
@@ -53,5 +50,5 @@ if __name__ == "__main__":
     backbone = config['backbone']
     cnn = config['cnn']
     vgg = vgg19_bn(cnn['ss'], cnn['ks'], hidden=cnn['hidden'], pretrained=False)
-    fake_input = torch.randn(5, 3, 32, 32)
+    fake_input = torch.randn(1, 3, 32, 117)
     print(vgg(fake_input).shape)
