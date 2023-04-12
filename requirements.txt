@@ -1,3 +1,10 @@
+pyyaml 
+tensorboardX 
+anyconfig 
+munch
+scipy
+sortedcontainers 
+gevent
 opencv-python
 pillow
 matplotlib
@@ -5,3 +12,9 @@ pyclipper
 shapely
 lmdb
 tqdm
+gevent-websocket 
+flask 
+editdistance 
+scikit-image 
+imgaug==0.2.8
+numpy==1.21.0
