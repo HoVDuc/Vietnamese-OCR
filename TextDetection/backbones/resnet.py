@@ -1,6 +1,7 @@
 import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
+from torchvision.ops import DeformConv2d
 BatchNorm2d = nn.BatchNorm2d
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
@@ -48,12 +49,11 @@ class BasicBlock(nn.Module):
         else:
             deformable_groups = dcn.get('deformable_groups', 1)
             if not self.with_modulated_dcn:
-                from assets.ops.dcn import DeformConv
-                conv_op = DeformConv
+                conv_op = DeformConv2d
                 offset_channels = 18
             else:
-                from assets.ops.dcn import ModulatedDeformConv
-                conv_op = ModulatedDeformConv
+                # from assets.ops.dcn import ModulatedDeformConv
+                conv_op = DeformConv2d
                 offset_channels = 27
             self.conv2_offset = nn.Conv2d(
                 planes,
@@ -65,7 +65,7 @@ class BasicBlock(nn.Module):
                 planes,
                 kernel_size=3,
                 padding=1,
-                deformable_groups=deformable_groups,
+                groups=deformable_groups,
                 bias=False)
         self.bn2 = BatchNorm2d(planes)
         self.downsample = downsample
@@ -119,12 +119,11 @@ class Bottleneck(nn.Module):
         else:
             deformable_groups = dcn.get('deformable_groups', 1)
             if not self.with_modulated_dcn:
-                from assets.ops.dcn import DeformConv
-                conv_op = DeformConv
+                conv_op = DeformConv2d
                 offset_channels = 18
             else:
-                from assets.ops.dcn import ModulatedDeformConv
-                conv_op = ModulatedDeformConv
+                # from assets.ops.dcn import ModulatedDeformConv
+                conv_op = DeformConv2d
                 offset_channels = 27
             self.conv2_offset = nn.Conv2d(
                 planes, deformable_groups * offset_channels,
@@ -132,7 +131,7 @@ class Bottleneck(nn.Module):
                 padding=1)
             self.conv2 = conv_op(
                 planes, planes, kernel_size=3, padding=1, stride=stride,
-                deformable_groups=deformable_groups, bias=False)
+                groups=deformable_groups, bias=False)
         self.bn2 = BatchNorm2d(planes)
         self.conv3 = nn.Conv2d(planes, planes * 4, kernel_size=1, bias=False)
         self.bn3 = BatchNorm2d(planes * 4)
