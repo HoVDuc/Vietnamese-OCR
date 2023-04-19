@@ -54,5 +54,6 @@ aug:
 predictor:
     # disable or enable beamsearch while prediction, use beamsearch will be slower
     beamsearch: False
+    import: ./test/test.pth
 
 quiet: False 
