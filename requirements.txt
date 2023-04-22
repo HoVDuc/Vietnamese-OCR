@@ -5,6 +5,8 @@ munch
 scipy
 sortedcontainers 
 gevent
+gdown
+prefetch_generator
 opencv-python
 pillow
 matplotlib

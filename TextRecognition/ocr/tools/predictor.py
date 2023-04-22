@@ -18,7 +18,7 @@ class Predictor():
         #     weights = config['weights']
         
         # Load weights
-        weights = './weights/transformerocr.pth'
+        weights = config['predictor']['import']
         model.load_state_dict(torch.load(weights, map_location=torch.device(device))) #Load parameters of model
 
         self.config = config
