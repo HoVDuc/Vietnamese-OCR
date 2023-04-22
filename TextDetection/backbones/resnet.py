@@ -128,6 +128,7 @@ class Bottleneck(nn.Module):
             self.conv2_offset = nn.Conv2d(
                 planes, deformable_groups * offset_channels,
                 kernel_size=3,
+                stride=stride,
                 padding=1)
             self.conv2 = conv_op(
                 planes, planes, kernel_size=3, padding=1, stride=stride,
@@ -307,8 +308,9 @@ def deformable_resnet50(pretrained=True, **kwargs):
                    stage_with_dcn=[False, True, True, True],
                    **kwargs)
     if pretrained:
-        model.load_state_dict(model_zoo.load_url(
-            model_urls['resnet50']), strict=False)
+        import torch
+        x = model_zoo.load_url(model_urls['resnet50'], map_location=torch.device("cuda"))
+        model.load_state_dict(x, strict=False)
     return model
 
 
