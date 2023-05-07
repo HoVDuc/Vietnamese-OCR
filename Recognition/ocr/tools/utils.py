@@ -33,9 +33,8 @@ def download(url, quiet=False):
 
 
 def download_config(id):
-    url = 'https://raw.githubusercontent.com/HoVDuc/Vietnamese-OCR/main/TextRecognition/config/{}'.format(id)
+    url = 'https://raw.githubusercontent.com/HoVDuc/Vietnamese-OCR/main/Recognition/config/{}'.format(id)
     r = requests.get(url)
-    print(r)
     config = yaml.safe_load(r.text)
     return config
 

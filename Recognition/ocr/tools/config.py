@@ -26,7 +26,6 @@ class Cfg(dict):
     def load_config_from_name(name):
         base_config = download_config(url_config['base'])
         config = download_config(url_config[name])
-
         base_config.update(config)
         return Cfg(base_config)
 

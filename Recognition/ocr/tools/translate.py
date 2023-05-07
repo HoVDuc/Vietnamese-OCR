@@ -182,7 +182,6 @@ def process_input(image, image_height, image_min_width, image_max_width):
     img = process_image(image, image_height, image_min_width, image_max_width)
     img = img[np.newaxis, ...] # Thêm một chiều mới vào ảnh
     img = torch.FloatTensor(img) # Convert ảnh từ numpy sang torch float
-    print(img.shape)
     return img
 
 def predict(filename, config):

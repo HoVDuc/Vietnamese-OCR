@@ -8,10 +8,7 @@ class Vocab():
         self.chars = chars
 
         self.c2i = {c:i+4 for i, c in enumerate(chars)}
-        print(self.c2i)
-
         self.i2c = {i+4:c for i, c in enumerate(chars)}
-        print(self.i2c)
                 
         self.i2c[0] = '<pad>'
         self.i2c[1] = '<sos>'
