@@ -1,8 +1,8 @@
 import: []
 package:
-    - 'TextDetection.experiment'
-    - 'TextDetection.structure.model'
-    - 'TextDetection.training.learning_rate'
-    - 'TextDetection.data'
-    - 'TextDetection.data.processes'
+    - 'DB.experiment'
+    - 'DB.structure.model'
+    - 'DB.training.learning_rate'
+    - 'DB.data'
+    - 'DB.data.processes'
 define: []
