@@ -1,5 +1,5 @@
 import:
-    - 'TextDetection/experiments/base.yaml'
+    - 'DB/experiments/base.yaml'
 package:
     - 'decoders.seg_detector_loss'
 define:
