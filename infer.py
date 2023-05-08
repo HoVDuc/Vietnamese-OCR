@@ -7,15 +7,12 @@ import argparse
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont, ImageColor
 from detection import Detection
 from DB.concern.config import Configurable, Config
 from Recognition.ocr.tools.predictor import Predictor
 from Recognition.ocr.tools.config import Cfg
 from postprocess import PostProcess
-
-
-
 
 def main():
     parser = argparse.ArgumentParser(description='Text Recognition inference')
@@ -31,6 +28,7 @@ def main():
                         help='output polygons if true', default=True)
     parser.add_argument('--visualize', action='store_true',
                         help='visualize maps in tensorboard')
+    parser.add_argument('--visualize_box', action='store_true', default=False)
 
     args = parser.parse_args()
     args = vars(args)
@@ -48,10 +46,11 @@ def main():
     image = np.array(image)
     post = PostProcess()
     imgs = post(image, contours, unclip_ratio=args['unclip_ratio'])
-    recog(imgs)
-    cv2.drawContours(image, post.contours, -1, (0, 255, 0), 3)
+    texts = recog(imgs)
+    if args['visualize_box']:
+        cv2.drawContours(image, post.contours, -1, (0, 255, 0), 3)
     image = Image.fromarray(image)
-    image.save('./test.jpg')
+    createImage(image, texts)
 
 def recog(images):
     config = Cfg.load_config_from_name('vgg_transformer')
@@ -61,9 +60,26 @@ def recog(images):
     config['device'] = 'cuda:0'
     detector = Predictor(config)
     images.reverse()
+    predict = []
     for image in images:
         image = Image.fromarray(image)
-        pred = detector.predict(image)
-        print(pred)
+        predict.append(detector.predict(image))
+    return predict 
+
+def add_text(image, texts):
+    new_img = Image.fromarray(np.full_like(image, 255))
+    _, h = new_img.size
+    font = ImageFont.truetype('./datagenerator/trdg/fonts/vi/Roboto-Black.ttf', h // 50)
+    text = '\n'.join(texts)
+    draw = ImageDraw.Draw(new_img)
+    draw.text(xy=(20, 20), text=text, font=font, fill='black')
+    return np.array(new_img)
+     
+def createImage(image, texts):
+    image = np.array(image)
+    text_img = add_text(image, texts)
+    image = np.concatenate([image, text_img], axis=1)
+    image = Image.fromarray(image)
+    image.save('./test.jpg')
         
 main()

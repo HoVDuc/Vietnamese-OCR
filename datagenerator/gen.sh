@@ -1,0 +1,1 @@
+python trdg/run.py -l vi -c 10 -w 5 -f 64
