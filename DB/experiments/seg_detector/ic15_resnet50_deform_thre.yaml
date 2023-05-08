@@ -1,5 +1,5 @@
 import:
-    - 'experiments/seg_detector/base_ic15.yaml'
+    - './DB/experiments/seg_detector/base_ic15.yaml'
 package: []
 define:
   - name: 'Experiment'
