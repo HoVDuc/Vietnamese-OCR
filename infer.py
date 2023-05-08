@@ -16,13 +16,13 @@ from postprocess import PostProcess
 
 def main():
     parser = argparse.ArgumentParser(description='Text Recognition inference')
-    parser.add_argument('--exp', type=str, default='./DB/experiments/seg_detector/td500_resnet50_deform_thre.yaml')
+    parser.add_argument('--exp', type=str, default='./DB/experiments/seg_detector/ic15_resnet50_deform_thre.yaml')
     parser.add_argument('--resume', default='./DB/weights/td500_resnet50')
     parser.add_argument('--image_path', type=str)
     parser.add_argument('--unclip_ratio', type=float, default=1.5)
     parser.add_argument('--box_thresh', type=float, default=0.6,
                         help='The threshold to replace it in the representers')
-    parser.add_argument('--image_short_side', type=int, default=736,
+    parser.add_argument('--image_short_side', type=int, default=1152,
                         help='The threshold to replace it in the representers')
     parser.add_argument('--polygon', action='store_true',
                         help='output polygons if true', default=True)
