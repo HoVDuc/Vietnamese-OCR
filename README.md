@@ -1,7 +1,5 @@
 # Vietnamese-OCR
-Final year project
-
-
+Graduation project information technology students
 
 # Introduction
 
