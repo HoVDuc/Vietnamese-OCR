@@ -45,7 +45,7 @@ def vgg19_bn(ss, ks, hidden, pretrained=True, dropout=0.5):
 
 if __name__ == "__main__":
     import yaml
-    stream = open('./TextRecognition/config/vgg-transformer.yml', 'r')
+    stream = open('./Recognition/config/vgg-transformer.yml', 'r')
     config = yaml.safe_load(stream)
     backbone = config['backbone']
     cnn = config['cnn']
