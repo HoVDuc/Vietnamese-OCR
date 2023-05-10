@@ -18,12 +18,14 @@ def main():
     parser = argparse.ArgumentParser(description='Text Recognition inference')
     parser.add_argument('--exp', type=str, default='./DB/experiments/seg_detector/ic15_resnet50_deform_thre.yaml')
     parser.add_argument('--resume', default='./DB/weights/td500_resnet50')
-    parser.add_argument('--image_path', type=str)
+    parser.add_argument('--image', type=str)
     parser.add_argument('--unclip_ratio', type=float, default=1.5)
     parser.add_argument('--box_thresh', type=float, default=0.6,
                         help='The threshold to replace it in the representers')
     parser.add_argument('--image_short_side', type=int, default=1152,
                         help='The threshold to replace it in the representers')
+    parser.add_argument('--recog', action='store_true', default=False)
+    parser.add_argument('--recognition_path', type=str, default='./Recognition/weights/vgg_transformerocr_500k.pth')
     parser.add_argument('--polygon', action='store_true',
                         help='output polygons if true', default=True)
     parser.add_argument('--visualize', action='store_true',
@@ -34,27 +36,32 @@ def main():
     args = vars(args)
     args = {k: v for k, v in args.items() if v is not None}
     
-    conf = Config()
-    experiment_args = conf.compile(conf.load(args['exp']))['Experiment']
-    experiment_args.update(cmd=args)
-    experiment = Configurable.construct_class_from_config(experiment_args)
-
-    demo = Detection(experiment, experiment_args, cmd=args)
-    contours = demo.inference(args['image_path'])
-
-    image = Image.open(args['image_path'])
+    image = Image.open(args['image'])
     image = np.array(image)
-    post = PostProcess()
-    imgs = post(image, contours, unclip_ratio=args['unclip_ratio'])
-    texts = recog(imgs)
-    if args['visualize_box']:
-        cv2.drawContours(image, post.contours, -1, (0, 255, 0), 3)
-    image = Image.fromarray(image)
-    createImage(image, texts)
+    
+    if args['recog']:
+        texts = recog([image], args['recognition_path'])
+        print('\n'.join(texts))
+    else: 
+        conf = Config()
+        experiment_args = conf.compile(conf.load(args['exp']))['Experiment']
+        experiment_args.update(cmd=args)
+        experiment = Configurable.construct_class_from_config(experiment_args)
 
-def recog(images):
+        demo = Detection(experiment, experiment_args, cmd=args)
+        contours = demo.inference(args['image'])
+
+        post = PostProcess()
+        imgs = post(image, contours, unclip_ratio=args['unclip_ratio'])
+        texts = recog(imgs, args['recognition_path'])
+        if args['visualize_box']:
+            cv2.drawContours(image, post.contours, -1, (0, 255, 0), 3)
+        image = Image.fromarray(image)
+        createImage(image, texts)
+
+def recog(images, weight_path):
     config = Cfg.load_config_from_name('vgg_transformer')
-    config['predictor']['import'] = './Recognition/weights/vgg_transformerocr_500k.pth'
+    config['predictor']['import'] = weight_path
     config['predictor']['beamsearch'] = True
     config['cnn']['pretrained']=False
     config['device'] = 'cuda:0'
