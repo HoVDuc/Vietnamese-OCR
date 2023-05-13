@@ -64,7 +64,6 @@ def main():
         im_show = draw_ocr(image, post.contours, texts, font_path='./doc/fonts/CormorantGaramond-Light.ttf')
         im_show = Image.fromarray(im_show)
         im_show.save('result.jpg')
-        print('ok')
 
 def recog(images, weight_path):
     config = Cfg.load_config_from_name('vgg_transformer')
@@ -79,22 +78,6 @@ def recog(images, weight_path):
         image = Image.fromarray(image)
         predict.append(detector.predict(image))
     return predict 
-
-def add_text(image, texts):
-    new_img = Image.fromarray(np.full_like(image, 255))
-    _, h = new_img.size
-    font = ImageFont.truetype('./datagenerator/trdg/fonts/vi/Roboto-Black.ttf', h // 50)
-    text = '\n'.join(texts)
-    draw = ImageDraw.Draw(new_img)
-    draw.text(xy=(20, 20), text=text, font=font, fill='black')
-    return np.array(new_img)
-     
-def createImage(image, texts):
-    image = np.array(image)
-    text_img = add_text(image, texts)
-    image = np.concatenate([image, text_img], axis=1)
-    image = Image.fromarray(image)
-    image.save('./test.jpg')
 
 def text_visual(texts,
                 scores,
