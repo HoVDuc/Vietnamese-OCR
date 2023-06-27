@@ -20,3 +20,4 @@ editdistance
 scikit-image 
 imgaug
 numpy
+gradio
