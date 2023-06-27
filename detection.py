@@ -50,8 +50,8 @@ class Detection:
         resized_img = cv2.resize(img, (new_width, new_height))
         return resized_img
 
-    def load_image(self, image_path):
-        img = cv2.imread(image_path, cv2.IMREAD_COLOR).astype('float32')
+    def load_image(self, img):
+        img = img.astype("float32")
         original_shape = img.shape[:2]
         img = self.resize_image(img)
         img -= self.RGB_MEAN
@@ -66,15 +66,14 @@ class Detection:
             boxes = batch_boxes[index]
         return boxes
 
-    def inference(self, image_path):
+    def inference(self, image):
         self.init_torch_tensor()
         model = self.init_model()
         self.resume(model, self.model_path)
         all_matircs = {}
         model.eval()
         batch = dict()
-        batch['filename'] = [image_path]
-        img, original_shape = self.load_image(image_path)
+        img, original_shape = self.load_image(image)
         batch['shape'] = [original_shape]
         with torch.no_grad():
             batch['image'] = img
