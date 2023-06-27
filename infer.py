@@ -50,7 +50,7 @@ def main():
         experiment = Configurable.construct_class_from_config(experiment_args)
 
         demo = Detection(experiment, experiment_args, cmd=args)
-        contours = demo.inference(args['image'])
+        contours = demo.inference(image)
 
         post = PostProcess()
         imgs = post(image, contours, unclip_ratio=args['unclip_ratio'])
